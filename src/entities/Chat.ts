@@ -1,5 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne } from "typeorm";
-import { User } from "./User";
+import { Conversation } from "./Conversation";
+
+export enum Sender {
+    USER = "user",
+    AI = "ai"
+}
 
 @Entity()
 export class Chat {
@@ -7,10 +12,16 @@ export class Chat {
     id: number;
 
     @Column("text")
-    message: string;
+    content: string;
 
-    @ManyToOne(() => User, user => user.chats)
-    user: User;
+    @Column({
+        type: "enum",
+        enum: Sender
+    })
+    sender: Sender;
+
+    @ManyToOne(() => Conversation, conversation => conversation.chats)
+    conversation: Conversation;
 
     @CreateDateColumn()
     createdAt: Date;

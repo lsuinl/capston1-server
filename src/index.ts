@@ -3,6 +3,7 @@ import cors from "cors";
 import { AppDataSource } from "./config/database";
 import { register, login } from "./controllers/userController";
 import { saveChat, getChats } from "./controllers/chatController";
+import { createConversation, getConversations, deleteConversation } from "./controllers/conversationController";
 import { authenticateToken } from "./middleware/auth";
 import dotenv from "dotenv";
 
@@ -27,9 +28,14 @@ AppDataSource.initialize()
 app.post("/api/register", register);
 app.post("/api/login", login);
 
+// Conversation routes
+app.post("/api/conversations", authenticateToken, createConversation);
+app.get("/api/conversations", authenticateToken, getConversations);
+app.delete("/api/conversations/:conversationId", authenticateToken, deleteConversation);
+
 // Chat routes
-app.post("/api/chats", authenticateToken, saveChat);
-app.get("/api/chats", authenticateToken, getChats);
+app.post("/api/conversations/:conversationId/chats", authenticateToken, saveChat);
+app.get("/api/conversations/:conversationId/chats", authenticateToken, getChats);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

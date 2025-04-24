@@ -1,13 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
-import { Chat } from "./Chat";
+import { Conversation } from "./Conversation";
 
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
     id: number;
-
-    @Column({ unique: true })
-    username: string;
 
     @Column()
     password: string;
@@ -15,12 +12,9 @@ export class User {
     @Column({ unique: true })
     email: string;
 
-    @OneToMany(() => Chat, chat => chat.user)
-    chats: Chat[];
+    @OneToMany(() => Conversation, conversation => conversation.user)
+    conversations: Conversation[];
 
     @CreateDateColumn()
     createdAt: Date;
-
-    @UpdateDateColumn()
-    updatedAt: Date;
 } 
