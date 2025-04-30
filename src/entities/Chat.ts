@@ -15,8 +15,8 @@ export class Chat {
     content: string;
 
     @Column({
-        type: "enum",
-        enum: Sender
+        type: "text",
+        enum: ["user", "ai"]
     })
     sender: Sender;
 

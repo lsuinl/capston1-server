@@ -1,42 +1,54 @@
 import express from "express";
 import cors from "cors";
 import { AppDataSource } from "./config/database";
-import { register, login } from "./controllers/userController";
-import { saveChat, getChats } from "./controllers/chatController";
-import { createConversation, getConversations, deleteConversation } from "./controllers/conversationController";
-import { authenticateToken } from "./middleware/auth";
+import router from "./routes";
 import dotenv from "dotenv";
 
+// 환경 변수 설정
 dotenv.config();
 
-const app = express();
-const port = process.env.PORT || 3000;
+// 상수 정의
+const SERVER_CONFIG = {
+    PORT: process.env.PORT || 3000,
+    MESSAGES: {
+        DB_INITIALIZED: "Data Source has been initialized!",
+        DB_INIT_ERROR: "Error during Data Source initialization:",
+        SERVER_STARTED: (port: string | number) => `Server is running on port ${port}`
+    }
+};
 
+// Express 앱 설정
+const app = express();
+
+// 미들웨어 설정
 app.use(cors());
 app.use(express.json());
 
-// Initialize database connection
-AppDataSource.initialize()
-    .then(() => {
-        console.log("Data Source has been initialized!");
-    })
-    .catch((error) => {
-        console.error("Error during Data Source initialization:", error);
-    });
+// 데이터베이스 초기화
+const initializeDatabase = async () => {
+    try {
+        await AppDataSource.initialize();
+        console.log(SERVER_CONFIG.MESSAGES.DB_INITIALIZED);
+    } catch (error) {
+        console.error(SERVER_CONFIG.MESSAGES.DB_INIT_ERROR, error);
+        process.exit(1); // 데이터베이스 연결 실패 시 서버 종료
+    }
+};
 
-// User routes
-app.post("/api/register", register);
-app.post("/api/login", login);
+// 라우터 설정
+app.use(router);
 
-// Conversation routes
-app.post("/api/conversations", authenticateToken, createConversation);
-app.get("/api/conversations", authenticateToken, getConversations);
-app.delete("/api/conversations/:conversationId", authenticateToken, deleteConversation);
+// 서버 시작
+const startServer = async () => {
+    try {
+        await initializeDatabase();
+        app.listen(SERVER_CONFIG.PORT, () => {
+            console.log(SERVER_CONFIG.MESSAGES.SERVER_STARTED(SERVER_CONFIG.PORT));
+        });
+    } catch (error) {
+        console.error("Failed to start server:", error);
+        process.exit(1);
+    }
+};
 
-// Chat routes
-app.post("/api/conversations/:conversationId/chats", authenticateToken, saveChat);
-app.get("/api/conversations/:conversationId/chats", authenticateToken, getChats);
-
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-}); 
+startServer(); 

@@ -14,15 +14,21 @@ export const authenticateToken = (req: CustomRequest, res: Response, next: NextF
     const token = authHeader && authHeader.split(" ")[1];
 
     if (!token) {
-        return res.status(401).json({ message: "Access token is required" });
+        return res.status(401).json({ 
+            statusCode: 401,
+            data: { message: "토큰이 필요합니다." }
+        });
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET || "your_jwt_secret_key") as JwtPayload;
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || "jwt key") as JwtPayload;
         req.user = { id: decoded.userId };
         next();
         return;
     } catch (error) {
-        return res.status(403).json({ message: "Invalid token" });
+        return res.status(403).json({ 
+            statusCode: 403,
+            data: { message: "만료된 토큰입니다." }
+        });
     }
 }; 
