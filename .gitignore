@@ -5,6 +5,9 @@
 # node_modules는 용량 크고, 보안 이슈 가능
 node_modules/
 
+# 주요 데이터
+src/const.ts
+
 # 로그 파일
 *.log
 npm-debug.log*

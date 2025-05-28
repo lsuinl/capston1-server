@@ -13,6 +13,9 @@ export class Conversation {
     @CreateDateColumn()
     createdAt: Date;
 
+    @Column({ type: 'json', nullable: true })
+    scores: any;
+
     @ManyToOne(() => User, user => user.conversations)
     user: User;
 

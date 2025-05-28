@@ -10,7 +10,8 @@ export const createConversation = async (req: CustomRequest, res: Response) => {
         if (!req.user) {
             return res.status(401).json({ 
                 statusCode: 401,
-                data: { message: "토큰이 만료되었습니다." }
+                message: "토큰이 만료되었습니다.",
+                data: {}
             });
         }
 
@@ -23,16 +24,18 @@ export const createConversation = async (req: CustomRequest, res: Response) => {
         await conversationRepository.save(conversation);
         return res.status(201).json({
             statusCode: 201,
+            message: "성공적으로 응답을 받았습니다",
             data: {
                 conversationId: conversation.id.toString(),
                 title: conversation.title,
-                message: "성공적으로 응답을 받았습니다"
+                createdAt: conversation.createdAt.toISOString().split('T')[0]
             }
         });
     } catch (error) {
         return res.status(500).json({ 
             statusCode: 500,
-            data: { message: "에러가 발생하였습니다." }
+            message: "에러가 발생하였습니다.",
+            data: {}
         });
     }
 };
@@ -42,7 +45,8 @@ export const getConversations = async (req: CustomRequest, res: Response) => {
         if (!req.user) {
             return res.status(401).json({ 
                 statusCode: 401,
-                data: { message: "토큰이 만료되었습니다." }
+                message: "토큰이 만료되었습니다.",
+                data: {}
             });
         }
 
@@ -59,15 +63,16 @@ export const getConversations = async (req: CustomRequest, res: Response) => {
 
         return res.status(201).json({
             statusCode: 201,
+            message: "성공적으로 응답을 받았습니다",
             data: {
-                message: "성공적으로 응답을 받았습니다",
                 conversations: formattedConversations
             }
         });
     } catch (error) {
         return res.status(500).json({ 
             statusCode: 500,
-            data: { message: "에러가 발생하였습니다." }
+            message: "에러가 발생하였습니다.",
+            data: {}
         });
     }
 };
@@ -77,7 +82,8 @@ export const getConversation = async (req: CustomRequest, res: Response) => {
         if (!req.user) {
             return res.status(401).json({ 
                 statusCode: 401,
-                data: { message: "토큰이 만료되었습니다." }
+                message: "토큰이 만료되었습니다.",
+                data: {}
             });
         }
 
@@ -90,7 +96,8 @@ export const getConversation = async (req: CustomRequest, res: Response) => {
         if (!conversation) {
             return res.status(404).json({ 
                 statusCode: 404,
-                data: { message: "내용을 찾을 수 없습니다." }
+                message: "내용을 찾을 수 없습니다.",
+                data: {}
             });
         }
 
@@ -102,17 +109,18 @@ export const getConversation = async (req: CustomRequest, res: Response) => {
 
         return res.status(201).json({
             statusCode: 201,
+            message: "성공적으로 응답을 받았습니다",
             data: {
                 conversationId: conversation.id.toString(),
                 title: conversation.title,
-                message: "성공적으로 응답을 받았습니다",
                 messages
             }
         });
     } catch (error) {
         return res.status(500).json({ 
             statusCode: 500,
-            data: { message: "에러가 발생하였습니다." }
+            message: "에러가 발생하였습니다.",
+            data: {}
         });
     }
 };
@@ -122,7 +130,8 @@ export const deleteConversation = async (req: CustomRequest, res: Response) => {
         if (!req.user) {
             return res.status(401).json({ 
                 statusCode: 401,
-                data: { message: "토큰이 만료되었습니다." }
+                message: "토큰이 만료되었습니다.",
+                data: {}
             });
         }
 
@@ -134,19 +143,22 @@ export const deleteConversation = async (req: CustomRequest, res: Response) => {
         if (!conversation) {
             return res.status(404).json({ 
                 statusCode: 404,
-                data: { message: "내용을 찾을 수 없습니다." }
+                message: "내용을 찾을 수 없습니다.",
+                data: {}
             });
         }
 
         await conversationRepository.remove(conversation);
         return res.json({ 
             statusCode: 200,
-            data: { message: "성공적으로 삭제되었습니다." }
+            message: "성공적으로 삭제되었습니다.",
+            data: {}
         });
     } catch (error) {
         return res.status(500).json({ 
             statusCode: 500,
-            data: { message: "에러가 발생하였습니다." }
+            message: "에러가 발생하였습니다.",
+            data: {}
         });
     }
 }; 

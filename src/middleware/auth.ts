@@ -16,7 +16,8 @@ export const authenticateToken = (req: CustomRequest, res: Response, next: NextF
     if (!token) {
         return res.status(401).json({ 
             statusCode: 401,
-            data: { message: "토큰이 필요합니다." }
+            message: "토큰이 필요합니다.",
+            data: {}
         });
     }
 
@@ -28,7 +29,8 @@ export const authenticateToken = (req: CustomRequest, res: Response, next: NextF
     } catch (error) {
         return res.status(403).json({ 
             statusCode: 403,
-            data: { message: "만료된 토큰입니다." }
+            message: "만료된 토큰입니다.",
+            data: {}
         });
     }
 }; 

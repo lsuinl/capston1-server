@@ -17,7 +17,8 @@ export const register = async (req: Request, res: Response) => {
         if (existingUser) {
             return res.status(400).json({ 
                 statusCode: 400,
-                data: { message: "이미 존재하는 이메일입니다." }
+                message: "이미 존재하는 이메일입니다.",
+                data: {}
             });
         }
 
@@ -37,8 +38,8 @@ export const register = async (req: Request, res: Response) => {
 
         return res.status(201).json({
             statusCode: 201,
+            message: "회원가입이 완료되었습니다.",
             data: {
-                message: "회원가입이 완료되었습니다.",
                 accessToken,
                 userId: user.id.toString(),
                 created_at: user.createdAt.toISOString().split('T')[0]
@@ -47,7 +48,8 @@ export const register = async (req: Request, res: Response) => {
     } catch (error) {
         return res.status(500).json({ 
             statusCode: 500,
-            data: { message: "에러가 발생하였습니다." }
+            message: "에러가 발생하였습니다.",
+            data: {}
         });
     }
 };
@@ -60,7 +62,8 @@ export const login = async (req: Request, res: Response) => {
         if (!user) {
             return res.status(401).json({ 
                 statusCode: 401,
-                data: { message: "이메일 또는 비밀번호가 일치하지 않습니다." }
+                message: "이메일 또는 비밀번호가 일치하지 않습니다.",
+                data: {}
             });
         }
 
@@ -68,7 +71,8 @@ export const login = async (req: Request, res: Response) => {
         if (!isValidPassword) {
             return res.status(401).json({ 
                 statusCode: 401,
-                data: { message: "이메일 또는 비밀번호가 일치하지 않습니다." }
+                message: "이메일 또는 비밀번호가 일치하지 않습니다.",
+                data: {}
             });
         }
 
@@ -80,8 +84,8 @@ export const login = async (req: Request, res: Response) => {
 
         return res.status(201).json({
             statusCode: 201,
+            message: "로그인이 완료되었습니다.",
             data: {
-                message: "로그인이 완료되었습니다.",
                 accessToken,
                 userId: user.id.toString()
             }
@@ -89,7 +93,8 @@ export const login = async (req: Request, res: Response) => {
     } catch (error) {
         return res.status(500).json({ 
             statusCode: 500,
-            data: { message: "에러가 발생하였습니다." }
+            message: "에러가 발생하였습니다.",
+            data: {}
         });
     }
 }; 
