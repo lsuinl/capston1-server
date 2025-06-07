@@ -20,7 +20,7 @@ export class Chat {
     })
     sender: Sender;
 
-    @ManyToOne(() => Conversation, conversation => conversation.chats)
+    @ManyToOne(() => Conversation, conversation => conversation.chats, { onDelete: 'CASCADE' })
     conversation: Conversation;
 
     @CreateDateColumn()

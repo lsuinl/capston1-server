@@ -16,9 +16,9 @@ export class Conversation {
     @Column({ type: 'json', nullable: true })
     scores: any;
 
-    @ManyToOne(() => User, user => user.conversations)
+    @ManyToOne(() => User, user => user.conversations, { onDelete: 'CASCADE' })
     user: User;
 
-    @OneToMany(() => Chat, chat => chat.conversation)
+    @OneToMany(() => Chat, chat => chat.conversation, { cascade: true })
     chats: Chat[];
 } 
